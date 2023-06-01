@@ -7,12 +7,17 @@ let package = Package(
     products: [
         .library(
             name: "DBDebugToolkit",
-            targets: ["DBDebugToolkit"]),
+            targets: ["DBDebugToolkit"]
+        )
     ],
     targets: [
         .target(
             name: "DBDebugToolkit",
             path: "DBDebugToolkit",
-            publicHeadersPath: "Headers"),
+            publicHeadersPath: "Headers",
+            swiftSettings: [
+                .unsafeFlags(["-suppress-warnings"])
+            ]
+        )
     ]
 )

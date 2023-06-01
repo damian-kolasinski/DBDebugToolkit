@@ -31,7 +31,6 @@
 #import "DBCustomActionsTableViewController.h"
 #import "DBCustomVariablesTableViewController.h"
 #import "DBCrashReportsTableViewController.h"
-#import <DBDebugToolkit/DBDebugToolkit-Swift.h>
 
 typedef NS_ENUM(NSUInteger, DBMenuTableViewControllerRow) {
     DBMenuTableViewControllerRowPerformance,
@@ -83,7 +82,11 @@ typedef NS_ENUM(NSUInteger, DBMenuTableViewControllerRow) {
 #pragma mark - UITableViewDataSource
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return NSBundle.buildInfoString;
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSString *applicationName = bundle.infoDictionary[(NSString *)kCFBundleNameKey];
+    NSString *buildVersion = bundle.infoDictionary[@"CFBundleShortVersionString"];
+    NSString *buildNumber = bundle.infoDictionary[@"CFBundleVersion"];
+    return [NSString stringWithFormat:@"%@, v. %@ (%@)", applicationName, buildVersion, buildNumber];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {

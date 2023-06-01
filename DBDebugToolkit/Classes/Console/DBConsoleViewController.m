@@ -22,7 +22,6 @@
 
 #import "DBConsoleViewController.h"
 #import <MessageUI/MessageUI.h>
-#import <DBDebugToolkit/DBDebugToolkit-Swift.h>
 @interface DBConsoleViewController () <DBConsoleOutputCaptorDelegate, MFMailComposeViewControllerDelegate>
 
 @property (nonatomic, strong) IBOutlet UITextView *textView;
@@ -82,7 +81,12 @@
 }
 
 - (NSString *)consoleOutputMailSubject {
-    return [NSString stringWithFormat:@"%@ - console output", NSBundle.buildInfoString];
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSString *applicationName = bundle.infoDictionary[(NSString *)kCFBundleNameKey];
+    NSString *buildVersion = bundle.infoDictionary[@"CFBundleShortVersionString"];
+    NSString *buildNumber = bundle.infoDictionary[@"CFBundleVersion"];
+    NSString *buildInfoString = [NSString stringWithFormat:@"%@, v. %@ (%@)", applicationName, buildVersion, buildNumber];
+    return [NSString stringWithFormat:@"%@ - console output", buildInfoString];
 }
 
 - (NSString *)consoleOutputMailHTMLBody {

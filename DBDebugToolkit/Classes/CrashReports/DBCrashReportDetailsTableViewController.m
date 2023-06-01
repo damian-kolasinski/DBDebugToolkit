@@ -26,7 +26,6 @@
 #import "DBTextViewViewController.h"
 #import "DBImageViewViewController.h"
 #import <MessageUI/MessageUI.h>
-#import <DBDebugToolkit/DBDebugToolkit-Swift.h>
 
 typedef NS_ENUM(NSUInteger, DBCrashReportDetailsTableViewControllerSection) {
     DBCrashReportDetailsTableViewControllerSectionDetails,
@@ -260,7 +259,12 @@ static NSString *const DBCrashReportDetailsTableViewControllerStackTraceCellIden
 
 
 - (NSString *)mailSubject {
-    return [NSString stringWithFormat:@"%@ - Crash report: %@, %@", NSBundle.buildInfoString,
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSString *applicationName = bundle.infoDictionary[(NSString *)kCFBundleNameKey];
+    NSString *buildVersion = bundle.infoDictionary[@"CFBundleShortVersionString"];
+    NSString *buildNumber = bundle.infoDictionary[@"CFBundleVersion"];
+    NSString *buildInfoString = [NSString stringWithFormat:@"%@, v. %@ (%@)", applicationName, buildVersion, buildNumber];
+    return [NSString stringWithFormat:@"%@ - Crash report: %@, %@", buildInfoString,
                                                                     self.crashReport.name,
                                                                     self.crashReport.dateString];
 }
@@ -272,7 +276,12 @@ static NSString *const DBCrashReportDetailsTableViewControllerStackTraceCellIden
     [mailHTMLBody appendString:@"<b><u>Environment:</u></b><br/>"];
 
     // App version.
-    [mailHTMLBody appendFormat:@"<b>App version:</b> %@<br/>", NSBundle.buildInfoString];
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSString *applicationName = bundle.infoDictionary[(NSString *)kCFBundleNameKey];
+    NSString *buildVersion = bundle.infoDictionary[@"CFBundleShortVersionString"];
+    NSString *buildNumber = bundle.infoDictionary[@"CFBundleVersion"];
+    NSString *buildInfoString = [NSString stringWithFormat:@"%@, v. %@ (%@)", applicationName, buildVersion, buildNumber];
+    [mailHTMLBody appendFormat:@"<b>App version:</b> %@<br/>", buildInfoString];
 
     // System version.
     [mailHTMLBody appendFormat:@"<b>System version:</b> %@<br/>", [self.deviceInfoProvider systemVersion]];

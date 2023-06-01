@@ -25,9 +25,8 @@
 #import "UIWindow+DBUserInterfaceToolkit.h"
 #import "NSObject+DBDebugToolkit.h"
 #import "UIColor+DBDebugToolkit.h"
-#import <DBDebugToolkit/DBDebugToolkit-Swift.h>
 
-NSString *const DBUserInterfaceToolkitColorizedViewBordersChangedNotification = @"DBUserInterfaceToolkitColorizedViewBordersChangedNotification";
+NSString *const DBUserInterfaceToolkitColorizedViewBordersChangedNotification = @"DBUserInterfaceToolkitColorizedViewBordersChangedNoti` ofication";
 
 @interface DBUserInterfaceToolkit ()
 
@@ -72,7 +71,7 @@ NSString *const DBUserInterfaceToolkitColorizedViewBordersChangedNotification = 
 #pragma mark - Public methods
 
 - (NSString *)autolayoutTrace {
-    UIWindow *window = UIWindow.keyWindow;
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     // Making sure to minimize the risk of rejecting app because of the private API.
     NSString *key = [[NSString alloc] initWithData:[NSData dataWithBytes:(unsigned char []){0x5f, 0x61, 0x75, 0x74, 0x6f, 0x6c, 0x61, 0x79, 0x6f, 0x75, 0x74, 0x54, 0x72, 0x61, 0x63, 0x65} length:16] encoding:NSASCIIStringEncoding];
     SEL selector = NSSelectorFromString(key);
@@ -87,7 +86,7 @@ NSString *const DBUserInterfaceToolkitColorizedViewBordersChangedNotification = 
 }
 
 - (NSString *)viewControllerHierarchy {
-    UIViewController *rootViewController = UIWindow.keyWindow.rootViewController;
+    UIViewController *rootViewController = [[UIApplication sharedApplication] keyWindow].rootViewController;
     // Making sure to minimize the risk of rejecting app because of the private API.
     NSString *key = [[NSString alloc] initWithData:[NSData dataWithBytes:(unsigned char []){0x5f, 0x70, 0x72, 0x69, 0x6e, 0x74, 0x48, 0x69, 0x65, 0x72, 0x61, 0x72, 0x63, 0x68, 0x79} length:15] encoding:NSASCIIStringEncoding];
     SEL selector = NSSelectorFromString(key);

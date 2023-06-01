@@ -27,7 +27,6 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/sysctl.h>
-#import <DBDebugToolkit/DBDebugToolkit-Swift.h>
 
 typedef void (*sighandler_t)(int);
 
@@ -230,7 +229,7 @@ static void handleSIGPIPESignal(int sig) {
                callStackSymbols:(NSArray<NSString *> *)callStackSymbols
                            date:(NSDate *)date {
     BOOL isMainThread = [NSThread isMainThread];
-    UIImage *screenshot = isMainThread ? [UIWindow.keyWindow db_snapshot] : nil;
+    UIImage *screenshot = isMainThread ? [[[UIApplication sharedApplication] keyWindow] db_snapshot] : nil;
     [self saveCrashReportWithName:name
                            reason:reason
                          userInfo:userInfo
@@ -256,7 +255,11 @@ static void handleSIGPIPESignal(int sig) {
                      screenshot:(UIImage *)screenshot {
     NSString *consoleOutput = self.consoleOutputCaptor.consoleOutput;
     NSString *systemVersion = [self.deviceInfoProvider systemVersion];
-    NSString *appVersion = NSBundle.buildInfoString;
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSString *applicationName = bundle.infoDictionary[(NSString *)kCFBundleNameKey];
+    NSString *buildVersion = bundle.infoDictionary[@"CFBundleShortVersionString"];
+    NSString *buildNumber = bundle.infoDictionary[@"CFBundleVersion"];
+    NSString *appVersion = [NSString stringWithFormat:@"%@, v. %@ (%@)", applicationName, buildVersion, buildNumber];
     DBCrashReport *crashReport = [[DBCrashReport alloc] initWithName:name
                                                               reason:reason
                                                             userInfo:userInfo
